@@ -25,6 +25,7 @@ import os
 import subprocess
 import re
 import argparse
+import sys
 
 greeting_text = """
 StartDotNet - C# Automated Rapid Project Setup
@@ -45,12 +46,17 @@ class UserInterface:
         print(greeting_text)
 
     def get_project_name(self):
-        try:
-            return input("Enter the name of the project: ")
-        except Exception as e:
-            print(f"Error: {e}")
-            sys.exit(1)
-
+        while True:
+            try:
+                project_name = input("Enter the name of the project: ")
+                if re.match("^[A-Za-z0-9_]+$", project_name):
+                    return project_name
+                else:
+                    print("Invalid project name. Project name must be non-empty and can only contain alphanumeric characters and underscores.")
+            except Exception as e:
+                print(f"Error: {e}")
+                sys.exit(1)
+                
     def get_project_type(self):
         while True:
             project_type = input("Enter the type of the project (console, webapi, etc.): ")
@@ -86,14 +92,6 @@ class DotNetProject:
         self.project_name = project_name
         self.project_type = project_type
         self.project_directory_path = os.path.join(os.getcwd(), self.project_name)
-
-    def get_project_name(self):
-        while True:
-            project_name = input("Enter the name of the project: ")
-            if re.match("^[A-Za-z0-9_]+$", project_name):
-                return project_name
-            else:
-                print("Invalid project name. Project name must be non-empty and can only contain alphanumeric characters and underscores.")
 
     def execute_single_command(self, single_command):
         print(f"Executing command: {single_command}")
