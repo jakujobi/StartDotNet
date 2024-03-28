@@ -43,6 +43,36 @@ Let's get started!\n
 def greeting():
     print(greeting_text)
 
+class UserInterface:
+    def greeting(self):
+        print(greeting_text)
+
+    def get_project_name(self):
+        try:
+            return input("Enter the name of the project: ")
+        except Exception as e:
+            print(f"Error: {e}")
+            sys.exit(1)
+
+    def display_menu(self):
+        print("\n1. Create a new .NET project")
+        print("2. Exit")
+
+    def handle_menu_selection(self):
+        try:
+            selection = int(input("Enter your selection: "))
+            if selection == 1:
+                project_name = self.get_project_name()
+                project = DotNetProject(project_name)
+                project.execute_dotnet_commands()
+            elif selection == 2:
+                print("Exiting...")
+                sys.exit(0)
+            else:
+                print("Invalid selection. Please enter a number from the menu.")
+        except ValueError:
+            print("Invalid input. Please enter a number.")
+
 class DotNetProject:
     def __init__(self, project_name=None):
         try:
@@ -107,16 +137,19 @@ class DotNetProject:
 
 
 def main():
+    ui = UserInterface()
+    ui.greeting()
+
     parser = argparse.ArgumentParser(description="Set up a new .NET project.")
     parser.add_argument("project_name", nargs='?', default=None, help="The name of the project to create.")
     args = parser.parse_args()
 
-    project = DotNetProject(args.project_name)
-    if project.project_name is None:
-        project.project_name = project.get_project_name()
+    if args.project_name is None:
+        args.project_name = ui.get_project_name()
 
-    project.execute_dotnet_commands()# Corrected function name
+    project = DotNetProject(args.project_name)
+    project.execute_dotnet_commands()
 
 if __name__ == "__main__":
-    greeting()
+    # greeting()
     main()
