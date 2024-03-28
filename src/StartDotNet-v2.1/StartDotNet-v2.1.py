@@ -44,6 +44,12 @@ def greeting():
     print(greeting_text)
 
 class UserInterface:
+    
+    """
+    This function prints the greeting text
+    Args: self (object): the instance of the class
+    Returns: None
+    """
     def greeting(self):
         print(greeting_text)
 
@@ -74,10 +80,10 @@ class UserInterface:
             print("Invalid input. Please enter a number.")
 
 class DotNetProject:
-    def __init__(self, project_name=None):
+    def __init__(self, project_name, project_type='console'):
         try:
-            self.project_name = project_name if project_name else self.get_project_name()
-            self.validate_project_name()
+            self.project_name = project_name
+            self.project_type = project_type
             self.project_directory_path = os.path.join(os.getcwd(), self.project_name)
         except ValueError as e:
             print(f"Error: {e}")
@@ -122,7 +128,7 @@ class DotNetProject:
 
         dotnet_commands = [
             f'dotnet new sln -n {self.project_name} -o "{self.project_directory_path}"',
-            f'dotnet new console -o "{os.path.join(self.project_directory_path, self.project_name)}"',
+            f'dotnet new {self.project_type} -o "{os.path.join(self.project_directory_path, self.project_name)}"',
             f'dotnet sln "{os.path.join(self.project_directory_path, f"{self.project_name}.sln")}" add "{os.path.join(self.project_directory_path, self.project_name, f"{self.project_name}.csproj")}"',
             f'dotnet build "{os.path.join(self.project_directory_path, self.project_name, f"{self.project_name}.csproj")}"',
             f'dotnet run --project "{os.path.join(self.project_directory_path, self.project_name, f"{self.project_name}.csproj")}"'
@@ -142,14 +148,18 @@ def main():
 
     parser = argparse.ArgumentParser(description="Set up a new .NET project.")
     parser.add_argument("project_name", nargs='?', default=None, help="The name of the project to create.")
+    parser.add_argument("-d", "--directory", help="The directory where the project should be created.")
+    parser.add_argument("-t", "--type", choices=['console', 'webapi', 'mvc'], default='console', help="The type of .NET project to create.")
     args = parser.parse_args()
 
     if args.project_name is None:
         args.project_name = ui.get_project_name()
 
-    project = DotNetProject(args.project_name)
+    if args.directory:
+        os.chdir(args.directory)
+
+    project = DotNetProject(args.project_name, args.type)
     project.execute_dotnet_commands()
 
 if __name__ == "__main__":
-    # greeting()
     main()
