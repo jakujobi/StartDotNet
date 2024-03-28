@@ -78,6 +78,18 @@ Let's get started!\n
 """
 
 class UserInterface:
+    """
+    The UserInterface class is responsible for handling all interactions with the user. It displays
+    messages, gathers user input, and guides the user through the project setup process.
+
+    Methods:
+        greeting: Displays a welcoming message and a brief overview of the script's capabilities.
+        get_project_name: Prompts the user for the project name, ensuring it adheres to naming conventions.
+        get_project_type: Asks the user for the project type and validates the input against supported types.
+        display_menu: Shows a menu with options to create a new .NET project or exit.
+        handle_menu_selection: Processes the user's selection from the menu.
+    """
+    
     def greeting(self):
         print(greeting_text)
 
@@ -124,6 +136,22 @@ class UserInterface:
             print("Invalid input. Please enter a number.")
 
 class DotNetProject:
+    """
+    The DotNetProject class encapsulates the functionality required to set up a new .NET project.
+    It manages the creation of the project directory, the initialization of the solution and project files,
+    and the building and execution of the project.
+
+    Attributes:
+        project_name (str): The name of the project.
+        project_type (str): The type of the project (default is 'console').
+        project_directory_path (str): The filesystem path to the project directory.
+
+    Methods:
+        __init__: Initializes a new instance of the DotNetProject class.
+        execute_single_command: Executes a single shell command and prints its output or error.
+        execute_dotnet_commands: Executes a series of .NET CLI commands to set up the project.
+    """
+    
     def __init__(self, project_name, project_type='console'):
         self.project_name = project_name
         self.project_type = project_type
