@@ -40,16 +40,7 @@ Please ensure that .NET is installed.
 Let's get started!\n
 """
 
-def greeting():
-    print(greeting_text)
-
 class UserInterface:
-    
-    """
-    This function prints the greeting text
-    Args: self (object): the instance of the class
-    Returns: None
-    """
     def greeting(self):
         print(greeting_text)
 
@@ -60,17 +51,27 @@ class UserInterface:
             print(f"Error: {e}")
             sys.exit(1)
 
+    def get_project_type(self):
+        while True:
+            project_type = input("Enter the type of the project (console, webapi, etc.): ")
+            if project_type in ['console', 'webapi', 'classlib', 'xunit', 'mstest']:
+                return project_type
+            else:
+                print("Invalid project type. Please enter a valid project type (console, webapi, classlib, xunit, mstest).")
+
     def display_menu(self):
         print("\nPlease select an option from the menu:")
         print("1. Create a new .NET project")
         print("2. Exit")
 
     def handle_menu_selection(self):
+        self.display_menu()
         try:
             selection = int(input("Enter your selection: "))
             if selection == 1:
                 project_name = self.get_project_name()
-                project = DotNetProject(project_name)
+                project_type = self.get_project_type()
+                project = DotNetProject(project_name, project_type)
                 project.execute_dotnet_commands()
             elif selection == 2:
                 print("Exiting...")
@@ -82,47 +83,33 @@ class UserInterface:
 
 class DotNetProject:
     def __init__(self, project_name, project_type='console'):
-        try:
-            self.project_name = project_name
-            self.project_type = project_type
-            self.project_directory_path = os.path.join(os.getcwd(), self.project_name)
-        except ValueError as e:
-            print(f"Error: {e}")
-            sys.exit(1)
+        self.project_name = project_name
+        self.project_type = project_type
+        self.project_directory_path = os.path.join(os.getcwd(), self.project_name)
 
     def get_project_name(self):
-        try:
-            return input("Enter the name of the project: ")
-        except Exception as e:
-            print(f"Error: {e}")
-            sys.exit(1)
-
-    def validate_project_name(self):
-        try:
-            if not self.project_name or not re.match("^[A-Za-z0-9_]+$", self.project_name):
-                raise ValueError("Invalid project name. Project name must be non-empty and can only contain alphanumeric characters and underscores.")
-        except ValueError as e:
-            print(f"Error: {e}")
-            sys.exit(1)
+        while True:
+            project_name = input("Enter the name of the project: ")
+            if re.match("^[A-Za-z0-9_]+$", project_name):
+                return project_name
+            else:
+                print("Invalid project name. Project name must be non-empty and can only contain alphanumeric characters and underscores.")
 
     def execute_single_command(self, single_command):
-        try: 
-            print(f"Executing command: {single_command}")
-            process = subprocess.Popen(single_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            stdout, stderr = process.communicate()
+        print(f"Executing command: {single_command}")
+        process = subprocess.Popen(single_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        stdout, stderr = process.communicate()
 
-            if process.returncode != 0:
-                print(f"Failed to execute command: {single_command}")
-                print(f"Error: {stderr.decode()}")
-                print(f"Output: {stdout.decode()}")
-                raise SystemExit("Stopping execution due to command failure.")
-            else:
-                print(f"Successfully executed command: {single_command}")
-                print(f"Output: {stdout.decode()}")
-        except Exception as e:
-            print (f"Error: {e}")
-            sys.exit(1)
-            
+        if process.returncode != 0:
+            print(f"Failed to execute command: {single_command}")
+            print(f"Error: {stderr.decode()}")
+            print(f"Output: {stdout.decode()}")
+            return False
+        else:
+            print(f"Successfully executed command: {single_command}")
+            print(f"Output: {stdout.decode()}")
+            return True
+
     def execute_dotnet_commands(self):
         os.makedirs(self.project_name, exist_ok=True)
         os.makedirs(self.project_directory_path, exist_ok=True)
@@ -135,12 +122,13 @@ class DotNetProject:
             f'dotnet run --project "{os.path.join(self.project_directory_path, self.project_name, f"{self.project_name}.csproj")}"'
         ]
 
-        for single_command in dotnet_commands:
-            try:
-                self.execute_single_command(single_command)
-            except Exception as e:
-                print (f"Error: {e}")
-                sys.exit(1)
+        failed_commands = [cmd for cmd in dotnet_commands if not self.execute_single_command(cmd)]
+
+        if failed_commands:
+            print("The following commands failed:")
+            for cmd in failed_commands:
+                print(cmd)
+            sys.exit(1)
 
 
 def main():
