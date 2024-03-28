@@ -1,75 +1,62 @@
-# StartDotNet
-C# Automated Rapid Project Setup (CARPS)
 
-## Overview
+# StartDotNet - C# Automated Rapid Project Setup
 
-CARPS is a Python script that automates the setup of new C# projects. It streamlines the project initialization process by generating a series of commands to create a .NET project and solution file.
+## Introduction
+
+StartDotNet is a Python-based tool designed to simplify the setup process for new C# projects using the .NET framework. It automates the creation of project directories, solution files, and project files, streamlining the initialization process for developers.
 
 ## Features
 
-* Interactive prompts for project name input.
-* Validation of project name.
-* Creation of a new directory for the project.
-* Initialization of a new .NET solution.
-* Creation of a new console application.
-* Addition of the application to the solution.
-* Building and running the application.
-* Error handling for command execution.
+- **Interactive Setup**: Guides users through the setup process with prompts for project names and types.
+- **Project Type Support**: Supports various project types including console applications, web APIs, class libraries, and test projects (xUnit, MSTest).
+- **Automation**: Automatically generates and executes .NET CLI commands to set up the project.
 
-## Download the [latest release](https://github.com/jakujobi/CARPS/releases/)
-- [Download CARPS v4 for Microsoft.exe](https://github.com/jakujobi/CARPS/releases/download/v4.0/CARPS.exe)
-   - Place into the directory you want your project to be in.
-   - Run.
-   - It will ask you for the name of your project.
-   - Click enter
-   - It will create, build and test your project in the directory.
-Or
-- [Download the python script](https://github.com/jakujobi/CARPS/releases/download/v4.0/CARPS.py)
-  - Use python to run it in your favorite IDE (hopefully VsCode ;) )
+## Prerequisites
 
-## Functions
+Before running StartDotNet, ensure you have the following installed:
 
-### greeting()
+- Python 3.x
+- .NET SDK
 
-Prints a welcome message to the user.
+You can check if these are installed by running `python --version` and `dotnet --version` in your terminal or command prompt.
 
-### get_project_name()
+## Installation
 
-Prompts the user to input the name of the project and returns the input as a string.
-
-### validate_project_name(project_name)
-
-Validates the project name. The project name must be non-empty and can only contain alphanumeric characters and underscores. If the project name is invalid, it raises a ValueError.
-
-### execute_single_command(single_command)
-
-Executes a single command using the subprocess module. It prints the command being executed and the output of the command. If the command fails, it prints an error message and stops the execution of the program.
-
-### execute_dotnet_commands(project_name)
-
-Creates the necessary directories for the project and constructs a list of .NET commands to be executed. It then calls `execute_single_command` for each command in the list.
-
-### main()
-
-The main function of the program. It parses command line arguments, gets the project name if not provided, validates the project name, and executes the necessary commands to set up the .NET project.
+StartDotNet does not require a separate installation process. Simply download the `StartDotNet.py` script to your local machine.
 
 ## Usage
 
-Run this script in a Python environment. Follow the prompts to input the name of the new project. The script will generate a series of commands to set up the project.
+1. **Open a Terminal or Command Prompt**: Navigate to the folder where you've saved `StartDotNet.py`.
+2. **Run the Script**: Execute the script by running the following command:
 
-## Requirements
+   ```bash
+   python StartDotNet.py
+   ```
+3. **Follow the Prompts**: The script will guide you through the process. You'll be asked to enter a project name and select a project type.
+4. **Check the Output**: Upon completion, the script will have created a new directory for your project, initialized a solution, created the project according to the type specified, added the project to the solution, and built and run the project.
 
-* Python 3.x
-* .NET SDK
+### Command Line Arguments
 
-## Created by
+Optionally, you can use command line arguments to specify the project name, directory, and type:
 
-John Akujobi
+- `-d`, `--directory`: Specify the directory where the project should be created.
+- `-t`, `--type`: Specify the type of .NET project (`console`, `webapi`, `mvc`).
 
-## Date
+Example:
 
-January 2024
+```bash
+python StartDotNet.py MyNewProject -d ./Projects -t console
+```
 
-## Version
+## Contributing
 
-4.0
+We welcome contributions to StartDotNet! If you have suggestions for improvements or encounter any issues, please feel free to submit an issue or pull request on our GitHub repository.
+
+## License
+
+StartDotNet is open-sourced under the GNU 3 License. See the LICENSE file for more details.
+
+## Acknowledgments
+
+Created by John Akujobi in March 2024.
+Special thanks to the .NET community.
