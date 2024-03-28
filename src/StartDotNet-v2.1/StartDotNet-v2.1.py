@@ -1,23 +1,59 @@
 """
-StartDotNet - C# Automated Rapid Project Setup
-
-This Python script automates the setup of new C# projects. It generates a text file with 
-commands to create a .NET project and solution file, streamlining the project initialization process.
-
-Usage:
-Run this script in a Python environment. Follow the prompts to input the name of the new project.
-The script will generate a text file with commands to set up the project.
-
-Features:
-- Creates a new .NET project and solution file.
-- Interactive prompts for project name input.
-- Generates a text file with necessary commands for project setup.
-
 Created by: John Akujobi
-Date: January 2024
-Version: 5.0
+Date: March 28, 2024
+Version: 2.1
 
 Note: Ensure Python 3.x and .NET SDK are installed before running this script.
+"""
+
+"""
+= SPEC-1: StartDotNet - C# Automated Rapid Project Setup Documentation
+:sectnums:
+:toc:
+
+== Background
+StartDotNet is a Python-based script designed to automate the setup process for new C# projects.
+It simplifies the initialization of .NET projects by generating a text file with commands to create the project and solution files, enhancing the project setup experience.
+
+== Requirements
+* Must run in a Python environment with access to the .NET SDK.
+* The user should input the project name when prompted.
+* The script creates the project and solution files in the current working directory.
+* Supported project types include console, webapi, classlib, xunit, and mstest.
+
+== Method
+
+=== UserInterface Class
+The `UserInterface` class manages interactions with the user, guiding them through the project setup process.
+
+* `greeting()`: Displays a welcoming message and a brief overview of the script's capabilities.
+* `get_project_name()`: Prompts the user to enter a project name, validating the input to ensure it contains only alphanumeric characters and underscores.
+* `get_project_type()`: Asks the user for the project type, ensuring it's one of the supported types (console, webapi, classlib, xunit, mstest).
+* `display_menu()`: Shows a menu with options to create a new .NET project or exit the script.
+* `handle_menu_selection()`: Processes the user's selection from the menu, initiating the project setup process or exiting the script based on the input.
+
+=== DotNetProject Class
+The `DotNetProject` class encapsulates the functionality for setting up the .NET project, including creating directories, initializing the solution, and building the project.
+
+* `__init__(self, project_name, project_type='console')`: Initializes a new instance of the `DotNetProject` class with the specified project name and type.
+* `execute_single_command(self, single_command)`: Executes a given shell command and prints the output or error message.
+* `execute_dotnet_commands(self)`: Sequentially executes a series of .NET CLI commands to set up the project environment, including creating the solution and project files, and building and running the project.
+
+== Implementation
+The implementation involves initializing instances of the `UserInterface` and `DotNetProject` classes and invoking their methods based on user input. The script starts by displaying a greeting message, then prompts the user for project details and executes the necessary .NET CLI commands to set up the project.
+
+== Milestones
+
+1. User interaction and input validation.
+2. Project directory and file setup.
+3. .NET project build and execution.
+
+== Gathering Results
+
+The success of the script can be evaluated based on the ease of use, the accuracy of input validation, and the successful creation, building, and running of the .NET project.
+
+===========================================================================================================================================================================
+
 """
 
 
@@ -95,17 +131,16 @@ class DotNetProject:
 
     def execute_single_command(self, single_command):
         print(f"Executing command: {single_command}")
-        process = subprocess.Popen(single_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        stdout, stderr = process.communicate()
+        completed_process = subprocess.run(single_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
-        if process.returncode != 0:
+        if completed_process.returncode != 0:
             print(f"Failed to execute command: {single_command}")
-            print(f"Error: {stderr.decode()}")
-            print(f"Output: {stdout.decode()}")
+            print(f"Error: {completed_process.stderr.decode()}")
+            print(f"Output: {completed_process.stdout.decode()}")
             return False
         else:
             print(f"Successfully executed command: {single_command}")
-            print(f"Output: {stdout.decode()}")
+            print(f"Output: {completed_process.stdout.decode()}")
             return True
 
     def execute_dotnet_commands(self):
