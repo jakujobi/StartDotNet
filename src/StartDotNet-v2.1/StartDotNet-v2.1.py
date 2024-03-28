@@ -61,7 +61,8 @@ class UserInterface:
             sys.exit(1)
 
     def display_menu(self):
-        print("\n1. Create a new .NET project")
+        print("\nPlease select an option from the menu:")
+        print("1. Create a new .NET project")
         print("2. Exit")
 
     def handle_menu_selection(self):
