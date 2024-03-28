@@ -1,5 +1,5 @@
 """
-C# Automated Rapid Project Setup (CARPS)
+StartDotNet - C# Automated Rapid Project Setup (CARPS)
 
 This Python script automates the setup of new C# projects. It generates a text file with 
 commands to create a .NET project and solution file, streamlining the project initialization process.
@@ -82,6 +82,7 @@ def execute_dotnet_commands(project_name):
 
     for single_command in dotnet_commands:
         execute_single_command(single_command)
+
 
 def main():
     parser = argparse.ArgumentParser(description="Set up a new .NET project.")
