@@ -143,10 +143,16 @@ def main():
         args.project_name = ui.get_project_name()
 
     if args.directory:
-        os.chdir(args.directory)
+        try:
+            os.chdir(args.directory)
+        except FileNotFoundError:
+            print(f"Error: The directory {args.directory} does not exist.")
+            sys.exit(1)
 
     project = DotNetProject(args.project_name, args.type)
     project.execute_dotnet_commands()
+
+#=====================================================================
 
 if __name__ == "__main__":
     main()
