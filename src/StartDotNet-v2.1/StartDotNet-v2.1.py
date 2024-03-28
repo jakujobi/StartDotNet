@@ -1,5 +1,5 @@
 """
-StartDotNet - C# Automated Rapid Project Setup (CARPS)
+StartDotNet - C# Automated Rapid Project Setup
 
 This Python script automates the setup of new C# projects. It generates a text file with 
 commands to create a .NET project and solution file, streamlining the project initialization process.
@@ -27,8 +27,8 @@ import re
 import argparse
 
 greeting_text = """
-C# Automated Rapid Project Setup (CARPS)
-Welcome to CARPS!
+StartDotNet - C# Automated Rapid Project Setup
+Welcome to StartDotNet!
 This application helps you set up a new .NET project.
 It will:
 - Create a new directory for your project,
@@ -36,7 +36,7 @@ It will:
 - Create a new console application,
 - Add the application to the solution,
 - Build the application, and run it.
-Please ensure that .NET SDK are installed.
+Please ensure that .NET is installed.
 Let's get started!\n
 """
 
