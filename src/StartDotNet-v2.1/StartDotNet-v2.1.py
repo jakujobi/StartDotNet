@@ -45,31 +45,47 @@ def greeting():
 
 class DotNetProject:
     def __init__(self, project_name=None):
-        self.project_name = project_name if project_name else self.get_project_name()
-        self.validate_project_name()
-        self.project_directory_path = os.path.join(os.getcwd(), self.project_name)
+        try:
+            self.project_name = project_name if project_name else self.get_project_name()
+            self.validate_project_name()
+            self.project_directory_path = os.path.join(os.getcwd(), self.project_name)
+        except ValueError as e:
+            print(f"Error: {e}")
+            sys.exit(1)
 
     def get_project_name(self):
-        return input("Enter the name of the project: ")
+        try:
+            return input("Enter the name of the project: ")
+        except Exception as e:
+            print(f"Error: {e}")
+            sys.exit(1)
 
     def validate_project_name(self):
-        if not self.project_name or not re.match("^[A-Za-z0-9_]+$", self.project_name):
-            raise ValueError("Invalid project name. Project name must be non-empty and can only contain alphanumeric characters and underscores.")
+        try:
+            if not self.project_name or not re.match("^[A-Za-z0-9_]+$", self.project_name):
+                raise ValueError("Invalid project name. Project name must be non-empty and can only contain alphanumeric characters and underscores.")
+        except ValueError as e:
+            print(f"Error: {e}")
+            sys.exit(1)
 
     def execute_single_command(self, single_command):
-        print(f"Executing command: {single_command}")
-        process = subprocess.Popen(single_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        stdout, stderr = process.communicate()
+        try: 
+            print(f"Executing command: {single_command}")
+            process = subprocess.Popen(single_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            stdout, stderr = process.communicate()
 
-        if process.returncode != 0:
-            print(f"Failed to execute command: {single_command}")
-            print(f"Error: {stderr.decode()}")
-            print(f"Output: {stdout.decode()}")
-            raise SystemExit("Stopping execution due to command failure.")
-        else:
-            print(f"Successfully executed command: {single_command}")
-            print(f"Output: {stdout.decode()}")
-
+            if process.returncode != 0:
+                print(f"Failed to execute command: {single_command}")
+                print(f"Error: {stderr.decode()}")
+                print(f"Output: {stdout.decode()}")
+                raise SystemExit("Stopping execution due to command failure.")
+            else:
+                print(f"Successfully executed command: {single_command}")
+                print(f"Output: {stdout.decode()}")
+        except Exception as e:
+            print (f"Error: {e}")
+            sys.exit(1)
+            
     def execute_dotnet_commands(self):
         os.makedirs(self.project_name, exist_ok=True)
         os.makedirs(self.project_directory_path, exist_ok=True)
@@ -83,7 +99,11 @@ class DotNetProject:
         ]
 
         for single_command in dotnet_commands:
-            self.execute_single_command(single_command)
+            try:
+                self.execute_single_command(single_command)
+            except Exception as e:
+                print (f"Error: {e}")
+                sys.exit(1)
 
 
 def main():
